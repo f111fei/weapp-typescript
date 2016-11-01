@@ -2,6 +2,8 @@
 
 这是一个演示如何使用TypeScript编写微信小程序的demo。
 
+![code](https://cloud.githubusercontent.com/assets/7069719/19881866/4276db58-a044-11e6-8d96-e14210ffe1cf.gif)
+
 ## 如何运行
 
 1.下载tsc
