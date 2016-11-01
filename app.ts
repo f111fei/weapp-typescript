@@ -2,8 +2,10 @@ import {WeApp} from './common/common'
 
 class WeAppClass implements WeApp {
 
-    public globalData = {
-        userInfo: null
+    public get globalData() {
+        return {
+            userInfo: null
+        }
     }
 
     public onLaunch(): void {
