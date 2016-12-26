@@ -1,4 +1,4 @@
-// Type definitions for weapp v0.10.102800
+// Type definitions for weapp v0.11.122100
 
 /**
  * App 实现的接口对象
@@ -19,6 +19,11 @@ declare interface IApp {
      * 生命周期函数--监听小程序隐藏。当小程序从前台进入后台，会触发 onHide
      */
     onHide?: () => void;
+
+    /**
+     * 错误监听函数--当小程序发生脚本错误，或者 api 调用失败时，会触发 onError 并带上错误信息
+     */
+    onError?: (msg: string) => void;
 }
 
 /**
@@ -76,6 +81,8 @@ declare interface IPage {
      */
     onReachBottom?: () => void;
 
+    onShareAppMessage?: () => wx.ShareOptions;
+
     /**
      * 将数据从逻辑层发送到视图层，同时改变对应的 this.data 的值
      */
@@ -122,6 +129,24 @@ declare namespace wx {
          * 接口调用结束的回调函数（调用成功、失败都会执行）
          */
         complete?: () => void;
+    }
+
+    export interface ShareOptions {
+
+        /**
+         * 分享标题, 默认为当前小程序名称
+         */
+        title?: string;
+
+        /**
+         * 分享描述, 默认为当前小程序名称
+         */
+        desc?: string;
+
+        /**
+         * 分享路径, 默认为当前页面path, 必须是以 / 开头的完整路径
+         */
+        path?: string;
     }
 
     export interface IData {
@@ -632,6 +657,11 @@ declare namespace wx {
     export interface AudioContext {
 
         /**
+         * 音频的地址
+         */
+        setSrc(src: string): void;
+
+        /**
          * 播放
          */
         play(): void;
@@ -937,8 +967,7 @@ declare namespace wx {
 
     // ---------------------------------- 位置API列表 ----------------------------------
 
-    export interface GetLocationResult {
-
+    export interface Location {
         /**
          * 纬度，浮点数，范围为-90~90，负数表示南纬
          */
@@ -948,6 +977,9 @@ declare namespace wx {
          * 经度，浮点数，范围为-180~180，负数表示西经
          */
         longitude: number;
+    }
+
+    export interface GetLocationResult extends Location {
 
         /**
          * 速度，浮点数，单位m/s
@@ -978,7 +1010,7 @@ declare namespace wx {
      */
     export function getLocation(options: GetLocationOptions): void;
 
-    export interface ChooseLocationResult {
+    export interface ChooseLocationResult extends Location {
 
         /**
          * 位置名称
@@ -989,16 +1021,6 @@ declare namespace wx {
          * 详细地址
          */
         address: string;
-
-        /**
-         * 纬度，浮点数，范围为-90~90，负数表示南纬
-         */
-        latitude: number;
-
-        /**
-         * 经度，浮点数，范围为-180~180，负数表示西经
-         */
-        longitude: number;
     }
 
     export interface ChooseLocationOptions extends BaseOptions {
@@ -1014,17 +1036,7 @@ declare namespace wx {
      */
     export function chooseLocation(options: ChooseLocationOptions): void;
 
-    export interface OpenLocationOptions extends BaseOptions {
-
-        /**
-         * 纬度，浮点数，范围为-90~90，负数表示南纬
-         */
-        latitude: number;
-
-        /**
-         * 经度，浮点数，范围为-180~180，负数表示西经
-         */
-        longitude: number;
+    export interface OpenLocationOptions extends BaseOptions, Location {
 
         /**
          * 缩放比例，范围1~28，默认为28
@@ -1046,6 +1058,35 @@ declare namespace wx {
      * 使用微信内置地图查看位置
      */
     export function openLocation(options: OpenLocationOptions): void;
+
+    export interface GetCenterLocationOptions extends BaseOptions {
+
+        /**
+         * 接口调用成功的回调函数 ，res = { longitude: "经度", latitude: "纬度"}
+         */
+        success?: (res?: Location) => void;
+    }
+
+    /**
+     * mapContext 通过 mapId 跟一个 <map/> 组件绑定，通过它可以操作对应的 <map/> 组件。
+     */
+    export interface MapContext {
+
+        /**
+         * 获取当前地图中心的经纬度，返回的是 gcj02 坐标系，可以用于 wx.openLocation
+         */
+        getCenterLocation(options: GetCenterLocationOptions): void;
+
+        /**
+         * 将地图中心移动到当前定位点，需要配合map组件的show-location使用
+         */
+        moveToLocation(): void;
+    }
+
+    /**
+     * 创建并返回 map 上下文 mapContext 对象
+     */
+    export function createMapContext(mapId: string): MapContext;
 
     // ---------------------------------- 设备API列表 ----------------------------------
 
@@ -1101,6 +1142,16 @@ declare namespace wx {
          * 微信版本号
          */
         version: string;
+
+        /**
+         * 操作系统版本
+         */
+        system: string;
+
+        /**
+         * 客户端平台
+         */
+        platform: string;
     }
 
     export interface GetSystemInfoOptions extends BaseOptions {
@@ -1170,6 +1221,27 @@ declare namespace wx {
      */
     export function makePhoneCall(options: MakePhoneCallOptions): void;
 
+    export interface ScanCodeResult {
+
+        /**
+         * 码的内容
+         */
+        result: string;
+    }
+
+    export interface ScanCodeOptions extends BaseOptions {
+
+        /**
+         * 接口调用成功的回调函数
+         */
+        success?: (res?: ScanCodeResult) => void;
+    }
+
+    /**
+     * 调起客户端扫码界面，扫码成功后返回对应的结果
+     */
+    export function scanCode(options: ScanCodeOptions): void;
+
     // ---------------------------------- 界面API列表 ----------------------------------
 
     export interface ShowToastOptions extends BaseOptions {
@@ -1188,6 +1260,11 @@ declare namespace wx {
          * 提示的延迟时间，单位毫秒，默认：1500, 最大为10000
          */
         duration?: number;
+
+        /**
+         * 是否显示透明蒙层，防止触摸穿透，默认：false
+         */
+        mask?: boolean;
     }
 
     /**
@@ -1341,6 +1418,19 @@ declare namespace wx {
      * 关闭当前页面，跳转到应用内的某个页面。
      */
     export function redirectTo(options: RedirectToOptions): void;
+
+    export interface SwitchTabOptions extends BaseOptions {
+
+        /**
+         * 需要跳转的 tabBar 页面的路径（需在 app.json 的 tabBar 字段定义的页面），路径后不能带参数
+         */
+        url: string;
+    }
+
+    /**
+     * 跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面
+     */
+    export function switchTab(options: SwitchTabOptions): void;
 
     export interface NavigateBackOptions {
 
@@ -1656,6 +1746,19 @@ declare namespace wx {
         lineTo(x: number, y: number): void;
 
         /**
+         * 画一条弧线。
+         * 创建一个圆可以用 arc() 方法指定其实弧度为0，终止弧度为 2 * Math.PI。
+         * 用 stroke() 或者 fill() 方法来在 canvas 中画弧线。
+         * @param x 圆的x坐标
+         * @param y 圆的y坐标
+         * @param r 圆的半径
+         * @param sAngle 起始弧度，单位弧度（在3点钟方向）
+         * @param eAngle 终止弧度
+         * @param counterclockwise 可选。指定弧度的方向是逆时针还是顺时针。默认是false，即顺时针。
+         */
+        arc(x: number, y: number, r: number, sAngle: number, eAngle: number, counterclockwise?: boolean): void;
+
+        /**
          * 添加一个矩形路径到当前路径。
          * @param x 矩形路径左上角的x坐标
          * @param y 矩形路径左上角的y坐标
@@ -1665,14 +1768,22 @@ declare namespace wx {
         rect(x: number, y: number, width: number, height: number): void;
 
         /**
-         * 添加一个弧形路径到当前路径，顺时针绘制。
+         * 填充一个矩形。用 setFillStyle() 设置矩形的填充色，如果没设置默认是黑色。
          * @param x 矩形路径左上角的x坐标
          * @param y 矩形路径左上角的y坐标
-         * @param radius 矩形路径的宽度
-         * @param startAngle 起始弧度
-         * @param sweepAngle 从起始弧度开始，扫过的弧度
+         * @param width 矩形路径的宽度
+         * @param height 矩形路径的高度
          */
-        arc(x: number, y: number, radius: number, startAngle: number, sweepAngle: number): void;
+        fillRect(x: number, y: number, width: number, height: number): void;
+
+        /**
+         * 画一个矩形(非填充)。用 setFillStroke() 设置矩形线条的颜色，如果没设置默认是黑色。
+         * @param x 矩形路径左上角的x坐标
+         * @param y 矩形路径左上角的y坐标
+         * @param width 矩形路径的宽度
+         * @param height 矩形路径的高度
+         */
+        strokeRect(x: number, y: number, width: number, height: number): void;
 
         /**
          * 创建二次贝塞尔曲线路径。
@@ -1724,6 +1835,23 @@ declare namespace wx {
         setShadow(offsetX: number, offsetY: number, blur: number, color: string): void;
 
         /**
+         * 创建一个线性的渐变颜色。需要使用 addColorStop() 来指定渐变点，至少要两个。
+         * @param x0 起点的x坐标
+         * @param y0 起点的y坐标
+         * @param x1 终点的x坐标
+         * @param y1 终点的y坐标
+         */
+        createLinearGradient(x0: number, y0: number, x1: number, y1: number): void;
+
+        /**
+         * 创建一个圆形的渐变颜色。起点在圆心，终点在圆环。需要使用 addColorStop() 来指定渐变点，至少要两个。
+         * @param x 圆心的x坐标
+         * @param y 圆心的y坐标
+         * @param r 圆的半径
+         */
+        createCircularGradient(x: number, y: number, r: number): void;
+
+        /**
          * 设置字体的字号。
          * @param fontSize 字体的字号
          */
@@ -1752,6 +1880,12 @@ declare namespace wx {
          */
         setMiterLimit(miterLimit: number): void;
     }
+
+    /**
+     * 创建 canvas 绘图上下文(指定 canvasId)
+     * @param canvasId 画布表示，传入定义在 <canvas/> 的 canvas-id
+     */
+    export function createCanvasContext(canvasId: string): CanvasContext;
 
     /**
      * 创建并返回绘图上下文context对象。
