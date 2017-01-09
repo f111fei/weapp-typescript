@@ -1,4 +1,4 @@
-// Type definitions for weapp v0.11.122100
+// Type definitions for weapp v0.12.130400
 
 /**
  * App 实现的接口对象
@@ -1227,6 +1227,21 @@ declare namespace wx {
          * 码的内容
          */
         result: string;
+
+        /**
+         * 所扫码的类型
+         */
+        scanType: string;
+
+        /**
+         * 所扫码的字符集
+         */
+        charSet: string;
+
+        /**
+         * 当所扫的码为当前小程序的合法二维码时，会返回此字段，内容为二维码携带的 path
+         */
+        path: string;
     }
 
     export interface ScanCodeOptions extends BaseOptions {
