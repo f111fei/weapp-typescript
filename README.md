@@ -6,9 +6,9 @@
 
 ## 如何运行
 
-1.下载tsc
+1.下载typescript
 
-	npm install tsc -g
+	npm install typescript -g
 
 2.编译
 
