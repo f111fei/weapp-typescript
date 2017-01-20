@@ -9,10 +9,8 @@ interface LogsPage extends IPage {
 
 class LogsPage {
 
-    public get data(): LogsPageData {
-        return {
-            logs: []
-        }
+    public data: LogsPageData = {
+        logs: []
     }
 
     public onLoad(): void {

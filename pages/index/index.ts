@@ -1,4 +1,4 @@
-import {WeApp} from '../../common/common';
+import { WeApp } from '../../common/common';
 
 const app: WeApp = getApp() as WeApp;
 
@@ -12,11 +12,9 @@ interface IndexPage extends IPage {
 
 class IndexPage {
 
-    public get data(): IndexPageData {
-        return {
-            motto: 'Hello World',
-            userInfo: {}
-        }
+    public data: IndexPageData = {
+        motto: 'Hello World',
+        userInfo: {}
     }
 
     public bindViewTap(): void {

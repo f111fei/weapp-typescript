@@ -1,4 +1,4 @@
-import {WeApp} from './common/common'
+import { WeApp } from './common/common'
 
 class WeAppClass implements WeApp {
 
