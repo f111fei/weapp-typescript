@@ -48,8 +48,9 @@ declare interface IPage {
 
     /**
      * 生命周期函数--监听页面加载
+     * @param options 接收页面参数可以获取wx.navigateTo和wx.redirectTo及<navigator/>中的 query
      */
-    onLoad?: (options?: any) => void;
+    onLoad?: (options?: wx.IData) => void;
 
     /**
      * 生命周期函数--监听页面初次渲染完成
