@@ -1,4 +1,4 @@
-// Type definitions for weapp v0.12.130400
+// Type definitions for weapp v0.13.140600
 
 /**
  * App 实现的接口对象
@@ -1096,7 +1096,7 @@ declare namespace wx {
         /**
          * 网络类型
          */
-        networkType: '2g' | '3g' | '4g' | 'wifi';
+        networkType: '2g' | '3g' | '4g' | 'wifi' | 'none' | 'unknown';
     }
 
     export interface GetNetworkTypeOptions extends BaseOptions {
