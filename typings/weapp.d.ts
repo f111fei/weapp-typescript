@@ -2018,51 +2018,36 @@ declare namespace wx {
 
     /**
      * 用户信息
-     * 
-     * @export
-     * @interface UserInfo
      */
     export interface UserInfo {
+
         /**
          * 用户昵称
-         * 
-         * @type {string}
-         * @memberOf UserInfo
          */
         nickName: string;
+
         /**
          * 头像地址
-         * 
-         * @type {string}
-         * @memberOf UserInfo
          */
         avatarUrl: string;
+
         /**
          * 性别 0：未知、1：男、2：女 
-         * 
-         * @type {number}
-         * @memberOf UserInfo
          */
         gender: number;
+
         /**
          * 省份
-         * 
-         * @type {string}
-         * @memberOf UserInfo
          */
         province: string;
+
         /**
          * 城市
-         * 
-         * @type {string}
-         * @memberOf UserInfo
          */
         city: string;
+
         /**
          * 国家
-         * 
-         * @type {string}
-         * @memberOf UserInfo
          */
         country: string;
     }
