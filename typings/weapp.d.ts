@@ -187,6 +187,11 @@ declare namespace wx {
         method?: string;
 
         /**
+         * 默认为 json。如果设置了 dataType 为 json，则会尝试对响应的数据做一次 JSON.parse
+         */
+        dataType?: string;
+
+        /**
          * 收到开发者服务成功返回的回调函数，res = {data: '开发者服务器返回的内容'}
          */
         success?: (res?: RequestResult) => void;
