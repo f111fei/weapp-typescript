@@ -1263,6 +1263,41 @@ declare namespace wx {
      */
     export function scanCode(options: ScanCodeOptions): void;
 
+    export interface SetClipboardDataOptions extends BaseOptions{
+
+        /**
+         * 需要设置剪贴板的内容
+         */
+        data: string;
+    }
+
+    /**
+     * 设置系统剪贴板的内容
+     * 
+     * @export
+     * @param {SetClipboardDataOptions} options 
+     */
+    export function setClipboardData(options: SetClipboardDataOptions): void;
+
+    export interface GetClipboardDataResult {
+
+        /**
+         * 剪贴板的内容
+         */
+        data: string;
+    }
+
+    export interface GetClipboardDataOptions extends BaseOptions{
+
+        /**
+         * 需要设置剪贴板的内容
+         */
+        success?: (res?: GetClipboardDataResult) => void;
+    }
+
+    export function getClipboardData(options: GetClipboardDataOptions): void;
+
+
     // ---------------------------------- 界面API列表 ----------------------------------
 
     export interface ShowToastOptions extends BaseOptions {
