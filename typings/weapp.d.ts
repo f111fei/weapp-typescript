@@ -1219,7 +1219,7 @@ declare namespace wx {
         /**
          * 需要拨打的电话号码
          */
-        phoneNumber: number;
+        phoneNumber: string;
     }
 
     /**
